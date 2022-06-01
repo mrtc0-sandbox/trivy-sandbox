@@ -4,22 +4,29 @@ on:
 jobs:
   test:
     name: Test
-    runs-on: normal
+    runs-on: ubuntu-latest
     steps:
       - name: Check out source code
         uses: actions/checkout@7884fcad6b5d53d10323aee724dc68d8b9096a2e # ratchet:actions/checkout@v2
 
       - name: Setup
         run: |
-          apt update -qq
-          apt install -y -qq curl wget
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq curl wget
           # Trivy Install
-          wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb
-          sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.28.1/trivy_0.28.1_Linux-64bit.deb
+          sudo dpkg -i trivy_0.28.1_Linux-64bit.deb
 
       - uses: reviewdog/action-setup@8f2ec89e6b467ca9175527d2a1641bbd0c05783b # ratchet:reviewdog/action-setup@v1
         with:
           reviewdog_version: latest
 
+      - name: Debug
+        run: |
+          trivy -q conf -f sarif --policy policies/policy --namespaces user manifests/ \
+          | jq -r '.runs[].results[] | "\(.level[0:1]):\("manifests/" + .locations[].physicalLocation.artifactLocation.uri):\(.locations[].physicalLocation.region.endLine) \(.message.text)"'
+
       - name: Run test
         run: ./entrypoint.sh
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
