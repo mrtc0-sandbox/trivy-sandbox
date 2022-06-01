@@ -14,8 +14,8 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq curl wget
           # Trivy Install
-          wget https://github.com/aquasecurity/trivy/releases/download/v0.18.3/trivy_0.18.3_Linux-64bit.deb
-          sudo dpkg -i trivy_0.18.3_Linux-64bit.deb
+          wget https://github.com/aquasecurity/trivy/releases/download/v0.28.1/trivy_0.28.1_Linux-64bit.deb
+          sudo dpkg -i trivy_0.28.1_Linux-64bit.deb
 
       - uses: reviewdog/action-setup@8f2ec89e6b467ca9175527d2a1641bbd0c05783b # ratchet:reviewdog/action-setup@v1
         with:
