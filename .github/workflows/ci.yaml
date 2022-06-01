@@ -4,7 +4,7 @@ on:
 jobs:
   test:
     name: Test
-    runs-on: normal
+    runs-on: ubuntu
     steps:
       - name: Check out source code
         uses: actions/checkout@7884fcad6b5d53d10323aee724dc68d8b9096a2e # ratchet:actions/checkout@v2
